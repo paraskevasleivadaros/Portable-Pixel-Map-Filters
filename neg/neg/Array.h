@@ -6,29 +6,22 @@
 #include <vector>
 #include <iostream>
 
-
-
 namespace math
 {
 	template <typename T>
 
-	class Array
-	{
-	public:
-
+	class Array	{
 	protected:
-		 std::vector<T> buffer;                             
 
-		unsigned int width,height;		                 
+		std::vector<T> buffer;                             
+		unsigned int width, height;		                 
 
 	public:
 
 		const unsigned int getWidth() const { return width; }
 		const unsigned int getHeight() const { return height; }
 
-		std::vector<T> * getRawDataPtr() {
-			return &buffer;
-		}
+		std::vector<T> * getRawDataPtr() { return &buffer; }
 
 		T getPosition(unsigned int x, unsigned int y) const {
 			
@@ -88,7 +81,7 @@ namespace math
 			this->height = src.height;
 		}
 
-		virtual ~Array(){ buffer.clear(); }
+		virtual ~Array() { buffer.clear(); }
 
 		Array & operator = (const Array & right) {
 			if (&right == this)	return *this;
@@ -101,8 +94,7 @@ namespace math
 			return *this;//returns the object created inside here
 		}
 
-		T & operator()(unsigned int i, unsigned int j)
-		{
+		T & operator()(unsigned int i, unsigned int j) {
 			if (i >= width || j >= height) { std::cout << "kleiseeeeeeeeee" << std::endl; }
 			return buffer[i * width + j];
 		}
