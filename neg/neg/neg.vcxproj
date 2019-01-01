@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Filter.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -162,8 +163,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Color.h" />
+    <ClInclude Include="Array.h" />
+    <ClInclude Include="Filter.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

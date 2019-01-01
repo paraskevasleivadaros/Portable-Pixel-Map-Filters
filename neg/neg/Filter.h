@@ -8,6 +8,7 @@
 typedef math::Vec3<float> Color;
 
 class Filter {
+
 	public:
 		Filter();
 		Filter(const Filter &f);
