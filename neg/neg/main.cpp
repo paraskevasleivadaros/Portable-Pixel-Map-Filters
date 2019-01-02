@@ -1,72 +1,107 @@
-//LEIBADAROS PARASKEYAS 3150090
+//LEIVADAROS PARASKEYAS 3150090
 //KOYLOYRIS GEORGIOS 3150080
 
 #include <iostream>
 #include <string>
-#include "Image.h"
+#include "Filter.h"
 
 using namespace imaging;
+void line();
 
 int main(int argc, char *argv[]) {
-	
+
 	std::string filename;
 
-	if (argc == 2) { //the name of the file is not provided as an arguement
-		
-		std::cout << "File name of the image to load: ";
-		std::cin >> filename;
-		std::cout << "\n";
+	if (argc < 3) {
 
-	} else if (argc == 3) { //the name of the file is provided as an arguement
-		
-		filename = argv[2];
+		std::cerr << "Error: Wrong Input" << std::endl;
+		std::cerr << "====" << std::endl;
 
-	} else { //not an input of type "neg <filename>"
-		
-		std::cerr << "Error: We only take input of type \"neg <filename>\"" << std::endl;
 	}
+	else {
+		filename = argv[argc - 1];
+		line();
 
-	Image *imgObj = new Image;
-	
-	if (imgObj->load(filename, "ppm")) {
+		Image *imgObj = new Image;
 
-		std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << std::endl;
-		std::cout << "\n";
+		if (imgObj->load(filename, "ppm")) {
 
-		unsigned int i,j,w,h;
+			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << std::endl;
+			line();
 
-		w = imgObj->getWidth();
-		h = imgObj->getHeight();
+			int i = 1;
+			while (i < argc-1) {
+				if (argv[i] == std::string("filter")) {
+					i++;
+					if (argv[i] == std::string("-f")) {
+						i++;
+						if (argv[i] == std::string("linear")) {
+							Color a, c;
+							i++;
+							a.r = (float)atof(argv[i]);
+							a.g = (float)atof(argv[i + 1]);
+							a.b = (float)atof(argv[i + 2]);
+							i += 3;
+							c.r = (float)atof(argv[i]);
+							c.g = (float)atof(argv[i + 1]);
+							c.b = (float)atof(argv[i + 2]);
+						
+							FilterLinear linear(a, c);
+							*imgObj = linear << *imgObj;						
+							i += 3;
+						}else if(argv[i] == std::string("gamma")) {
+							i++;
+							float g = (float)atof(argv[i]);
+							if (g >= 0.5 && g <= 2.0) {
+								
+								FilterGamma gamma(g);
+								*imgObj = gamma << *imgObj;
 
-		//initializes the buffer of the new image
-		for (i = 0; i < h; i++) {
-			for (j = 0; j < w; j++) {
-				Color rawData;
-				rawData.r = 1.0F - imgObj->getPixel(i,j).r;
-				rawData.g = 1.0F - imgObj->getPixel(i,j).g;
-				rawData.b = 1.0F - imgObj->getPixel(i,j).b;
-				imgObj->setPixel(i,j,rawData);
+							}else {
+								line();
+								std::cerr << "Error: g values must be lower than 2.0 and fewer than 0.5" << std::endl;
+								line();
+
+								system("pause");
+								return 1;
+							}
+						}else {
+							line();
+							std::cout << "Error: Wrong type of filter" << std::endl;
+							line();
+
+							system("pause");
+							return 1;
+						}
+					}else {
+						i++;
+					}
+				}else {
+					i++;
+				}
 			}
 		}
-		
+		else {
+			std::cerr << "Error: Image Failed Loading\n";
+		}	
+	
 		//adds the name of the new image
-		std::string newfilename = filename.substr(0, filename.length() - 4);
-		newfilename.append("_neg.ppm");
-		
+		std::string newfilename = "filtered_" + filename;
+
 		if (!imgObj->save(newfilename, "ppm")) {
 
-			std::cerr << "Error: Negative of Input Image Failed Saving\n";
+			std::cerr << "Error: Image Failed Saving\n";
+			//return 1;
 		}
 
-	} else {
-
-		std::cerr << "Error: Negative of Input Image Failed Loading\n";
+	imgObj->~Image();//Destroys the pointer of image object		
 	}
-
-	imgObj->~Image();//Destroys the pointer of image object
 	
 	system("PAUSE");
-
 	return 0;
-
 } 
+
+
+void line() {
+	std::cout << "*******************************************" << std::endl;
+}

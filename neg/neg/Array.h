@@ -6,30 +6,35 @@
 #include <vector>
 #include <iostream>
 
+
+
 namespace math
 {
 	template <typename T>
 
-	class Array	{
-	protected:
+	class Array
+	{
+	public:
 
-		std::vector<T> buffer;                             
-		unsigned int width, height;		                 
+	protected:
+		 std::vector<T> buffer;                             
+
+		unsigned int width,height;		                 
 
 	public:
 
 		const unsigned int getWidth() const { return width; }
 		const unsigned int getHeight() const { return height; }
 
-		std::vector<T> * getRawDataPtr() { return &buffer; }
+		T * getRawDataPtr() {
+			return buffer;
+		}
 
 		T getPosition(unsigned int x, unsigned int y) const {
-			
-			//T colorObj;
-
+			//T Color;
 			//if x,y pair is out-of-bounds return a black (0,0,0) color
 			if ((x > height - 1) || (y > width - 1)) {
-				return NULL; 
+				std::cerr << "Out of bounds!" << std::endl;
 			}else {
 				return buffer[x * width + y];//location of pixel inside array "buffer"
 			}
@@ -38,7 +43,7 @@ namespace math
 		void setPosition(unsigned int x, unsigned int y, T & value) {
 			//if x,y pair is out-of-bounds return a black (0,0,0) color
 			if ((x > height - 1) || (y > width - 1)) {
-				return;
+				std::cerr << "Out of bounds!" << std::endl;
 			}
 			else {
 				buffer[x * width + y] = value;
@@ -77,11 +82,11 @@ namespace math
 		Array(const Array &src) {
 			const T * data_ptr = src.buffer;
 			setData(data_ptr);
-			this->width = src.width;
-			this->height = src.height;
+			this->width = src.getWidth();
+			this->height = src.getHeight();
 		}
 
-		virtual ~Array() { buffer.clear(); }
+		virtual ~Array(){ buffer.clear(); }
 
 		Array & operator = (const Array & right) {
 			if (&right == this)	return *this;
@@ -94,8 +99,9 @@ namespace math
 			return *this;//returns the object created inside here
 		}
 
-		T & operator()(unsigned int i, unsigned int j) {
-			if (i >= width || j >= height) { std::cout << "kleiseeeeeeeeee" << std::endl; }
+		T & operator()(unsigned int i, unsigned int j)
+		{
+			if (i >= width || j >= height) { std::cout << "Out of bounds!" << std::endl; }
 			return buffer[i * width + j];
 		}
 	};

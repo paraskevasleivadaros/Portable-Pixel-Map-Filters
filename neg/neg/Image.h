@@ -14,11 +14,13 @@
 #include <vector>
 #include <string>
 
-/*! The imaging namespace contains every class or function associated with the image storage, compression and manipulation. */
+/*! The imaging namespace contains every class or function associated with the image storage, compression and manipulation. 
+ */ 
 
 typedef math::Vec3<float> Color;
-
 namespace imaging {
+
+	
 
 //------------------------------------ class Image ------------------------------------------------
 

@@ -4,11 +4,11 @@
 #define _FILTER
 
 #include "Image.h"
+#include "Vec3.h"
 
 typedef math::Vec3<float> Color;
 
 class Filter {
-
 	public:
 		Filter();
 		Filter(const Filter &f);
