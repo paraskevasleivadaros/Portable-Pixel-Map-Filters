@@ -1,4 +1,4 @@
-//LEIVADAROS PARASKEYAS 3150090
+//LEIVADAROS PARASKEVAS 3150090
 //KOYLOYRIS GEORGIOS 3150080
 
 #include <iostream>
@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
 		std::cerr << "Error: Wrong Input" << std::endl;
 		std::cerr << "====" << std::endl;
 
-	}
-	else {
+	} else {
+
 		filename = argv[argc - 1];
 		line();
 
@@ -36,8 +36,9 @@ int main(int argc, char *argv[]) {
 					if (argv[i] == std::string("-f")) {
 						i++;
 						if (argv[i] == std::string("linear")) {
+
 							Color a, c;
-							i++;
+							++i;
 							a.r = (float)atof(argv[i]);
 							a.g = (float)atof(argv[i + 1]);
 							a.b = (float)atof(argv[i + 2]);
@@ -49,8 +50,10 @@ int main(int argc, char *argv[]) {
 							FilterLinear linear(a, c);
 							*imgObj = linear << *imgObj;						
 							i += 3;
-						}else if(argv[i] == std::string("gamma")) {
-							i++;
+
+						} else if (argv[i] == std::string("gamma")) {
+
+							++i;
 							float g = (float)atof(argv[i]);
 							if (g >= 0.5 && g <= 2.0) {
 								
@@ -58,6 +61,7 @@ int main(int argc, char *argv[]) {
 								*imgObj = gamma << *imgObj;
 
 							}else {
+
 								line();
 								std::cerr << "Error: g values must be lower than 2.0 and fewer than 0.5" << std::endl;
 								line();
@@ -65,20 +69,19 @@ int main(int argc, char *argv[]) {
 								system("pause");
 								return 1;
 							}
-						}else {
+						} else {
+
 							line();
-							std::cout << "Error: Wrong type of filter" << std::endl;
+							std::cerr << "Error: Wrong type of filter" << std::endl;
 							line();
 
 							system("pause");
 							return 1;
 						}
-					}else {
-						i++;
-					}
-				}else {
-					i++;
-				}
+
+					} else { i++; }
+
+				} else { i++; }
 			}
 		}
 		else {
