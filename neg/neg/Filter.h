@@ -4,39 +4,40 @@
 #define _FILTER
 
 #include "Image.h"
+#include "Vec3.h"
+
+typedef math::Vec3<float> Color;
 
 class Filter {
-	
 	public:
 		Filter();
 		Filter(const Filter &f);
 		virtual ~Filter();
 	
-	protected:
-		virtual imaging::Image operator << (const imaging::Image& image) = 0;
+		virtual imaging::Image operator << (const imaging::Image & image) = 0;
 };
 
-class FilterLinear : public Filter {
-	
-	private:
-		Color a, c;
+class FilterLinear:public Filter {
 
 	public:
 		FilterLinear();
 		FilterLinear(Color a, Color c);
 		~FilterLinear();
-		imaging::Image operator << (const imaging::Image& image);
+		imaging::Image operator << (const imaging::Image & image);
+
+	private:
+		Color a,c;
 };
 
-class FilterGamma : public Filter {
-	
-	private:
-		float g;
+class FilterGamma :public Filter {
 
 	public:
 		FilterGamma();
-		FilterGamma(float g);
+		FilterGamma(float gamma);
 		~FilterGamma();
-		imaging::Image operator << (const imaging::Image& image);
+		virtual imaging::Image operator << (const imaging::Image & image);
+	
+	private:
+		float gamma;	
 };
 #endif

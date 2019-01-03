@@ -1,4 +1,7 @@
 #include "Filter.h"
+#include <math.h>
+
+using namespace math;
 
 Filter::Filter() {}
 Filter::Filter(const Filter &f) {}
@@ -11,8 +14,8 @@ imaging::Image FilterLinear::operator << (const imaging::Image& image) {
 		
 	imaging::Image imgObj = image;
 
-	for (unsigned int i = 0; i < imgObj.getHeight(); i++) {
-		for (unsigned int j = 0; j < imgObj.getWidth(); j++) {
+	for (unsigned int i = 0; i < imgObj.getWidth(); i++) {
+		for (unsigned int j = 0; j < imgObj.getHeight(); j++) {
 			
 			Color rgb = imgObj.getPosition(i, j)*a + c;
 
@@ -25,19 +28,19 @@ imaging::Image FilterLinear::operator << (const imaging::Image& image) {
 	return imgObj;
 }
 
-FilterGamma::FilterGamma() : g(0.0) {}
-FilterGamma::FilterGamma(float g) : g(g) {}
+FilterGamma::FilterGamma() : gamma(0.0) {}
+FilterGamma::FilterGamma(float gamma) : gamma(gamma) {}
 FilterGamma::~FilterGamma() {}
 imaging::Image FilterGamma::operator << (const imaging::Image& image) {
 		
 	imaging::Image imgObj = image;
 
-	for (unsigned int i = 0; i < imgObj.getHeight(); i++) {
-		for (unsigned int j = 0; j < imgObj.getWidth(); j++) {
+	for (unsigned int i = 0; i < imgObj.getWidth(); i++) {
+		for (unsigned int j = 0; j < imgObj.getHeight(); j++) {
 
-			imgObj(i, j).r = pow(imgObj(i, j).r, g);
-			imgObj(i, j).g = pow(imgObj(i, j).g, g);
-			imgObj(i, j).b = pow(imgObj(i, j).b, g);
+			imgObj(i, j).r = pow(imgObj(i, j).r, gamma);
+			imgObj(i, j).g = pow(imgObj(i, j).g, gamma);
+			imgObj(i, j).b = pow(imgObj(i, j).b, gamma);
 		}
 	}
 	return imgObj;
