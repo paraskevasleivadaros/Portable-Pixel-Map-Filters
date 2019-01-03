@@ -1,13 +1,13 @@
 #include "Filter.h"
 
 Filter::Filter() {}
-Filter::~Filter() {}
 Filter::Filter(const Filter &f) {}
+Filter::~Filter() {}
 
-FilterLinear::FilterLinear() :a(0.0), c(0.0) {}
-FilterLinear::FilterLinear(Color a, Color c) :a(a), c(c) {}
+FilterLinear::FilterLinear() : a(0.0), c(0.0) {}
+FilterLinear::FilterLinear(Color a, Color c) : a(a), c(c) {}
 FilterLinear::~FilterLinear() {}
-imaging::Image FilterLinear::operator << (const imaging::Image & image) {
+imaging::Image FilterLinear::operator << (const imaging::Image& image) {
 		
 	imaging::Image imgObj = image;
 
@@ -16,8 +16,8 @@ imaging::Image FilterLinear::operator << (const imaging::Image & image) {
 			
 			Color rgb = imgObj.getPosition(i, j)*a + c;
 
-			rgb = rgb.clampToLowerBound(0.0);
-			rgb = rgb.clampToUpperBound(1.0);
+			rgb = rgb.clampToLowerBound(0.0f);
+			rgb = rgb.clampToUpperBound(1.0f);
 
 			imgObj.setPosition(i, j, rgb);
 		}
@@ -25,10 +25,10 @@ imaging::Image FilterLinear::operator << (const imaging::Image & image) {
 	return imgObj;
 }
 
-FilterGamma::FilterGamma() :g(0.0) {}
-FilterGamma::FilterGamma(float g) :g(g) {}
+FilterGamma::FilterGamma() : g(0.0) {}
+FilterGamma::FilterGamma(float g) : g(g) {}
 FilterGamma::~FilterGamma() {}
-imaging::Image FilterGamma::operator << (const imaging::Image & image) {
+imaging::Image FilterGamma::operator << (const imaging::Image& image) {
 		
 	imaging::Image imgObj = image;
 

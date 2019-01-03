@@ -1,116 +1,43 @@
-#include "Image.h"
 #include "../ppm/ppm.h"
+#include "Image.h"
 #include <ostream>
 #include <string>
-#include "Array.h"
 
 namespace imaging {
 
 	bool isPPM(std::string& filename);
 	bool areEqual(const std::string& a, const std::string& b);
-
-	//returns pointer to internal data
-	Color * Image::getRawDataPtr() {
-		return buffer;
-	}
-
-	//retrieves the color of the image at location (x, y)
-	Color Image::getPixel(unsigned int x, unsigned int y) const {
-
-		Color colorObj;
-
-		//if x,y pair is out-of-bounds return a black (0,0,0) color
-		if ((x > height - 1) || (y > width - 1)) {
-			
-			colorObj.r = 0;
-			colorObj.g = 0;
-			colorObj.b = 0;
-			return colorObj;
-		}
-
-		unsigned int pixel = (x * width + y); //location of pixel inside array "buffer"
-
-		colorObj.r = buffer[pixel].r;
-		colorObj.g = buffer[pixel].g;
-		colorObj.b = buffer[pixel].b;
-
-		return colorObj;
-	}
-	
-	//sets the color of the image at location (x, y)
-	void Image::setPixel(unsigned int x, unsigned int y, Color & value) {
-		
-		if ((x > height - 1) || (y > width - 1)) {return;}
-		
-		unsigned int pixel = (x * width + y);//location of pixel inside array "buffer"
-
-		buffer[pixel].r = value.r;
-		buffer[pixel].g = value.g;
-		buffer[pixel].b = value.b;
-	}
-	
-	//Copies the image data from an external raw buffer to the internal image buffer
-	void Image::setData(const Color * & data_ptr) {
-
-		buffer = new Color[width * height];
-
-		//check if x,y pair is out-of-bounds
-		if ((height == 0) || (width == 0) || (data_ptr == nullptr)) return;
-			
-		for (unsigned int pixel = 0; pixel < width * height; pixel++) {
-			buffer[pixel].r = data_ptr[pixel].r;
-			buffer[pixel].g = data_ptr[pixel].g;
-			buffer[pixel].b = data_ptr[pixel].b;
-		}
-	}
 	
 	//Default constructor
-	Image::Image() {
+	Image::Image() {}
 
-		buffer = nullptr;
-		width = 0;
-		height = 0;
-	}
-
-	Image::Image(unsigned int width, unsigned int height) {
-		
-		buffer = new Color[width * height];
-		this->width = width;
-		this->height = height;
-	}
+	Image::Image(unsigned int width, unsigned int height) : Array<Color>(width, height) {}
 	
-	Image::Image(unsigned int width, unsigned int height, const Color * data_ptr){
-		
-		setData(data_ptr);
-		this->width = width;
-		this->height = height;		
-	}
+	Image::Image(unsigned int width, unsigned int height, std::vector<Color> & data_ptr) : Array<Color>(width, height, data_ptr) {}
 	
 	//Copy constructor
-	Image::Image(const Image &src) {
-		
-		const Color * data_ptr = src.buffer;
-		setData(data_ptr);
-		this->width = src.width;
-		this->height = src.height;
-	}
+	Image::Image(const Image &src) : Array(src) {}
+
+	/*! Copy assignment operator.
+	 *
+	 *\param right is the source image.
+	*/
+	/*Image & Image::operator = (const Image & right) {
+
+		if (&right == this)	return *this;
+		if (!this->buffer.empty()) this->buffer.clear();
+
+		buffer.resize(width * height);
+		for (int i = 0; i < buffer.size(); i++) 
+			buffer[i] = right.buffer[i];
+
+		this->width = right.width;
+		this->height = right.height;
+		return *this;
+	}*/
 
 	//destructor
-	Image::~Image() {
-		delete[] buffer;
-	}
-
-	Image & Image::operator = (const Image & right){
-		
-		if (&right == this)	return *this;
-		if (this->buffer != nullptr) delete[] buffer;
-
-		const Color * data_ptr = right.buffer;
-		setData(data_ptr);
-		this->width = right.width;
-		this->height= right.height;
-		return *this;//returns the object created inside here
-	}
+	Image::~Image() {}
 
 	//Loads the image data from the specified file, if the extension of the filename matches the format string
 	bool Image::load(const std::string & filename, const std::string & format) {
@@ -118,32 +45,41 @@ namespace imaging {
 		std::string filenameNotConst = filename;
 		if (!isPPM(filenameNotConst)) return false;
 
-		if (format != "ppm") {return false;}
+		if (format != "ppm") return false;
 
-		int w, h;
-		float *f_buffer;
+		// calls the ReadPPM which returns a pointer to float array and gives values to the 2 integers that we passed
+		float * f_buffer = ReadPPM(filename.c_str(), &(int&)width, &(int&)height); 
+		// temporary pointer that shows in the begining of the table which contains the data we read
+		float * f_ptr = f_buffer; 
 
-		f_buffer = ReadPPM(filename.c_str(), &w, &h);//read image data and pass into f_buffer
-
+		// check if we read the image correctly
+		// if ReadPPM returned null we failed to read the file and we return false
 		if (f_buffer == nullptr) {
+			std::cerr << "Error: Load of Image Failed!\n";
 			return false;
+		} else {
+
+			buffer.resize(width*height);
+			Color * color = new Color();
+
+			// initialize the pointers that show to green,  red, blue in the array we loaded before
+			for (int i = 0; i < buffer.size(); i++) {
+
+				color->r = *f_ptr;
+				f_ptr++;
+
+				color->g = *f_ptr;
+				f_ptr++;
+
+				color->b = *f_ptr;
+				f_ptr++;
+
+				buffer[i] = *color;
+			}
+
+			delete[] f_buffer, color; // free the memory
+			return true;
 		}
-
-		width = w;
-		height = h;
-
-		buffer = new Color[width * height];
-
-		for (unsigned int i = 0; i < width * height; i ++) {
-		
-			buffer[i].r = f_buffer[i * 3];
-			buffer[i].g = f_buffer[i * 3 + 1];
-			buffer[i].b = f_buffer[i * 3 + 2];
-		}
-
-		delete[] f_buffer;//deleting array "f_buffer" since it takes up useless space
-
-		return true;
 	}
 
 	//Stores the image data to the specified file, if the extension of the filename matches the format string.
@@ -152,21 +88,32 @@ namespace imaging {
 		std::string filenameNotConst = filename;
 		if (!isPPM(filenameNotConst)) return false;
 		
-		if (format != "ppm") {return false;}
+		if (format != "ppm") return false;
 
-		float *f_buffer = new float[width * height * 3];
+		Color * color_buffer = getRawDataPtr(); // a pointer to use it to pass all the data
 
-		int w = width;
-		int h = height;
+		float * f_buffer = new float[width * height * 3]; // create an new float table, this table we will write to the file
+		float * f_ptr = f_buffer; //  a pointer to use it to get access to all the table
 
-		for (int i = 0; i < w * h; i++) {
-			
-			f_buffer[i*3] = buffer[i].r;
-			f_buffer[i*3+1] = buffer[i].g;
-			f_buffer[i*3+2] = buffer[i].b;
+		// copy the data from buffer to the new table
+		// its color takes a different cell in the table
+		for (unsigned int i = 0; i < width*height; i++) {
+
+			*f_ptr = color_buffer->r;
+			f_ptr++;
+
+			*f_ptr = color_buffer->g;
+			f_ptr++;
+
+			*f_ptr = color_buffer->b;
+			f_ptr++;
+
+			color_buffer++;
 		}
 
-		return WritePPM(f_buffer, width, height,filename.c_str());
+		delete[] f_buffer, color_buffer; // freeing memory
+
+		return WritePPM(f_buffer, width, height, filename.c_str());
 	}
 
 	//Checks if format="ppm"

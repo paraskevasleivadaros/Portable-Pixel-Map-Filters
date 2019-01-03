@@ -5,14 +5,13 @@
 #include <string>
 #include "Filter.h"
 
-using namespace imaging;
 void line();
 
 int main(int argc, char *argv[]) {
 
 	std::string filename;
 
-	if (argc < 3) {
+	if (argc < 6) {
 
 		std::cerr << "Error: Wrong Input" << std::endl;
 		std::cerr << "====" << std::endl;
@@ -22,7 +21,7 @@ int main(int argc, char *argv[]) {
 		filename = argv[argc - 1];
 		line();
 
-		Image *imgObj = new Image;
+		imaging::Image *imgObj = new imaging::Image;
 
 		if (imgObj->load(filename, "ppm")) {
 
@@ -60,13 +59,13 @@ int main(int argc, char *argv[]) {
 								FilterGamma gamma(g);
 								*imgObj = gamma << *imgObj;
 
-							}else {
+							} else {
 
 								line();
-								std::cerr << "Error: g values must be lower than 2.0 and fewer than 0.5" << std::endl;
+								std::cerr << "Error: Gamma values must be lower than 2.0 and higher than 0.5" << std::endl;
 								line();
 
-								system("pause");
+								system("PAUSE");
 								return 1;
 							}
 						} else {
@@ -75,7 +74,7 @@ int main(int argc, char *argv[]) {
 							std::cerr << "Error: Wrong type of filter" << std::endl;
 							line();
 
-							system("pause");
+							system("PAUSE");
 							return 1;
 						}
 
@@ -83,8 +82,7 @@ int main(int argc, char *argv[]) {
 
 				} else { i++; }
 			}
-		}
-		else {
+		} else {
 			std::cerr << "Error: Image Failed Loading\n";
 		}	
 	
@@ -94,7 +92,6 @@ int main(int argc, char *argv[]) {
 		if (!imgObj->save(newfilename, "ppm")) {
 
 			std::cerr << "Error: Image Failed Saving\n";
-			//return 1;
 		}
 
 	imgObj->~Image();//Destroys the pointer of image object		
@@ -106,5 +103,5 @@ int main(int argc, char *argv[]) {
 
 
 void line() {
-	std::cout << "*******************************************" << std::endl;
+	std::cout << "*******************************************\n";
 }

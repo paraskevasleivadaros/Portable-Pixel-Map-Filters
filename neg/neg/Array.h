@@ -6,105 +6,105 @@
 #include <vector>
 #include <iostream>
 
+namespace math {
 
-
-namespace math
-{
 	template <typename T>
 
-	class Array
-	{
-	public:
+	class Array {
 
-	protected:
-		 std::vector<T> buffer;                             
+		protected:
 
-		unsigned int width,height;		                 
+			std::vector<T> buffer;                          
+			unsigned int width, height;		                 
 
-	public:
+		public:
 
-		const unsigned int getWidth() const { return width; }
-		const unsigned int getHeight() const { return height; }
-
-		T * getRawDataPtr() {
-			return buffer;
-		}
-
-		T getPosition(unsigned int x, unsigned int y) const {
-			//T Color;
-			//if x,y pair is out-of-bounds return a black (0,0,0) color
-			if ((x > height - 1) || (y > width - 1)) {
-				std::cerr << "Out of bounds!" << std::endl;
-			}else {
-				return buffer[x * width + y];//location of pixel inside array "buffer"
+			const unsigned int getWidth() const { return width; }
+			const unsigned int getHeight() const { return height; }
+	
+			T * getRawDataPtr() {
+				return this->buffer.data();
 			}
-		}
 
-		void setPosition(unsigned int x, unsigned int y, T & value) {
-			//if x,y pair is out-of-bounds return a black (0,0,0) color
-			if ((x > height - 1) || (y > width - 1)) {
-				std::cerr << "Out of bounds!" << std::endl;
+			T getPosition(unsigned int x, unsigned int y) const {
+			
+				//if x,y pair is out-of-bounds return a black (0,0,0) color
+				if ((x > width - 1) || (y > height - 1)) {
+					std::cerr << "Error1: Out of bounds!\n";
+				} else {
+					return buffer[x * width + y];//location of pixel inside array "buffer"
+				}
+			}	
+
+			void setPosition(unsigned int x, unsigned int y, T & value) {
+				//if x,y pair is out-of-bounds return a black (0,0,0) color
+				if ((x > width - 1) || (y > height - 1)) {
+					std::cerr << "Error2: Out of bounds!\n";
+				} else {
+					buffer[x * width + y] = value;
+				}
 			}
-			else {
-				buffer[x * width + y] = value;
+
+			void setData(const T * & data_ptr) {
+				//check if x,y pair is out-of-bounds
+				if ((height == 0) || (width == 0) || (data_ptr == nullptr)) return;
+
+				buffer.resize(width*height);
+
+				for (unsigned int i = 0; i < width * height; i++) {
+					buffer[i] = data_ptr[i];
+				}
 			}
-		}
 
-		void setData(const T * & data_ptr) {
-			//check if x,y pair is out-of-bounds
-			if ((height == 0) || (width == 0) || (data_ptr == nullptr)) return;
-
-			buffer.reserve(width*height);
-
-			for (unsigned int i = 0; i < width * height; i++) {
-				buffer[i] = data_ptr[i];
+			Array() {
+				buffer.resize(0);
+				width = 0;
+				height = 0;
 			}
-		}
 
-		Array() {
-			buffer.reserve(0);
-			width = 0;
-			height = 0;
-		}
+			Array(unsigned int width, unsigned int height) {
+				buffer.resize(width * height);
+				this->width = width;
+				this->height = height;
+			}
 
-		Array(unsigned int width, unsigned int height) {
-			buffer.reserve(width * height);
-			this->width = width;
-			this->height = height;
-		}
+			Array(unsigned int width, unsigned int height, std::vector<T> & data_ptr) {
+				this->buffer = data_ptr;
+				this->width = width;
+				this->height = height;
+			}
 
-		Array(unsigned int width, unsigned int height, const T * data_ptr) {
-			setData(data_ptr);
-			this->width = width;
-			this->height = height;
-		}
+			Array(const Array<T> &src) {
+				buffer.resize(src.width * src.height);
+				for (int i = 0; i < buffer.size(); i++) {
+					buffer[i] = src.buffer[i];
+				}
+				this->width = src.getWidth();
+				this->height = src.getHeight();
+			}
 
-		Array(const Array &src) {
-			const T * data_ptr = src.buffer;
-			setData(data_ptr);
-			this->width = src.getWidth();
-			this->height = src.getHeight();
-		}
+			virtual ~Array(){ buffer.clear(); }
 
-		virtual ~Array(){ buffer.clear(); }
+			Array<T> & operator = (const Array<T> & right) {
+				
+				if (&right == this)	return *this;
+				if (!this->buffer.empty()) this->buffer.clear();
+				
+				buffer.resize(right.width * right.height);
+				for (unsigned int i = 0; i < buffer.size(); i++) {
+					buffer[i] = right.buffer[i];
+				}
+				this->width = right.width;
+				this->height = right.height;
+				return *this;
+			}
 
-		Array & operator = (const Array & right) {
-			if (&right == this)	return *this;
-			if (this->buffer != nullptr) delete[] buffer;
-
-			const T * data_ptr = right.buffer;
-			setData(data_ptr);
-			this->width = right.width;
-			this->height = right.height;
-			return *this;//returns the object created inside here
-		}
-
-		T & operator()(unsigned int i, unsigned int j)
-		{
-			if (i >= width || j >= height) { std::cout << "Out of bounds!" << std::endl; }
-			return buffer[i * width + j];
-		}
+			T & operator()(unsigned int i, unsigned int j)
+			{
+				/*if (i >= width || j >= height) { std::cerr << "Error3: Out of bounds!\n";}*/
+				return buffer[i * width + j];
+				
+			}
 	};
 }
-
 #endif

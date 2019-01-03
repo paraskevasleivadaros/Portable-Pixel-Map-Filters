@@ -17,9 +17,10 @@
 /*! The imaging namespace contains every class or function associated with the image storage, compression and manipulation. 
  */ 
 
+// create pseudonym of math::Vec3<float>
 typedef math::Vec3<float> Color;
-namespace imaging {
 
+namespace imaging {
 	
 
 //------------------------------------ class Image ------------------------------------------------
@@ -39,73 +40,15 @@ namespace imaging {
 	 */ 
 	class Image : public math::Array<Color>
 	{
-	public:
-		                                             
-	protected:
-		Color * buffer;                              //! Holds the image data.
-
-		unsigned int width, 						 //! The width of the image (in pixels)
-					 height;		                 //! The height of the image (in pixels)
 
 	public:
-		// metric accessors
-		
-		/*! Returns the width of the image
-		 */
-		const unsigned int getWidth() const {return width;}      
-		
-		/*! Returns the height of the image
-		 */
-		const unsigned int getHeight() const {return height;}   
-
-		// data accessors
-		
-		/*! Obtains a pointer to the internal data.
-		 *
-		 *  This is NOT a copy of the internal image data, but rather a pointer 
-		 *  to the internally allocated space, so DO NOT attempt to delete the pointer. 
-		 */
-		Color * getRawDataPtr();
-
-		/*! Obtains the color of the image at location (x,y).
-		 *
-		 *  The method should do any necessary bounds checking. 
-		 *
-		 *  \param x is the (zero-based) horizontal index of the pixel to get. 
-		 *  \param y is the (zero-based) vertical index of the pixel to get. 
-		 *
-		 *  \return The color of the (x,y) pixel as a Color object. Returns a black (0,0,0) color in case of an out-of-bounds x,y pair.
-		 */
-		Color getPixel(unsigned int x, unsigned int y) const;
-
-		// data mutators
-		
-		/*! Sets the RGB values for an (x,y) pixel.
-		 * 
-		 *  The method should perform any necessary bounds checking.
-		 *  
-		 *  \param x is the (zero-based) horizontal index of the pixel to set. 
-		 *  \param y is the (zero-based) vertical index of the pixel to set. 
-		 *  \param value is the new color for the (x,y) pixel.
-		 */
-		void setPixel(unsigned int x, unsigned int y, Color & value); 
-		                                                         
-		/*! Copies the image data from an external raw buffer to the internal image buffer. 
-		 *
-		 *  The member function ASSUMES that the input buffer is of a size compatible with the internal storage of the 
-		 *  Image object and that the data buffer has been already allocated. If the image buffer is not allocated or the 
-		 *  width or height of the image are 0, the method should exit immediately.
-		 *
-		 *  \param data_ptr is the reference to the preallocated buffer from where to copy the data to the Image object.
-		 */
-		void setData(const Color * & data_ptr);            
 
 		// constructors and destructor
 
 		/*! Default constructor.
-		 * 
-		 * By default, the dimensions of the image should be zero and the buffer must be set to nullptr.
-		 */
+		*
+		* By default, the dimensions of the image should be zero and the buffer must be set to nullptr.
+		*/
 		Image();											     	
 		
 		/*! Constructor with width and height specification.
@@ -123,7 +66,7 @@ namespace imaging {
 		 * 
 		 * \see setData
 		 */ 
-		Image(unsigned int width, unsigned int height, const Color * data_ptr);
+		Image(unsigned int width, unsigned int height, std::vector<Color> & data_ptr);
 		
 		/*! Copy constructor.
 		 *
@@ -135,13 +78,9 @@ namespace imaging {
 		 */
 		~Image();
 
-		/*! Copy assignment operator.
-		 *
-		 * \param right is the source image.
-		 */
-		Image & operator = (const Image & right);
+		/*Image & operator = (const Image & right);*/
 
-		/*!
+		/*
 		 * Loads the image data from the specified file, if the extension of the filename matches the format string.
 		 *
 		 * Only the "ppm" extension is supported for now. The extension comparison should be case-insensitive. If the 
