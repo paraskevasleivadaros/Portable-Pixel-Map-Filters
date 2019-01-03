@@ -58,7 +58,7 @@ namespace imaging {
 		// check if we read the image correctly
 		// if ReadPPM returned null we failed to read the file and we return false
 		if (f_buffer == nullptr) {
-			std::cerr << "Error: Load of Image Failed!\n";
+			std::cerr << "Error: Image Loading Failed\n";
 			return false;
 		} else {
 

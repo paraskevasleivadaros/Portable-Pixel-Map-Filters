@@ -13,8 +13,7 @@ int main(int argc, char *argv[]) {
 
 	if (argc < 6) {
 
-		std::cerr << "Error: Wrong Input" << std::endl;
-		std::cerr << "====" << std::endl;
+		std::cerr << "Error: Wrong Input\n";
 
 	} else {
 
@@ -25,7 +24,7 @@ int main(int argc, char *argv[]) {
 
 		if (imgObj->load(filename, "ppm")) {
 
-			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << std::endl;
+			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			line();
 
 			int i = 1;
@@ -41,14 +40,13 @@ int main(int argc, char *argv[]) {
 							a.r = (float)atof(argv[i]);
 							a.g = (float)atof(argv[i + 1]);
 							a.b = (float)atof(argv[i + 2]);
-							i += 3;
-							c.r = (float)atof(argv[i]);
-							c.g = (float)atof(argv[i + 1]);
-							c.b = (float)atof(argv[i + 2]);
+							c.r = (float)atof(argv[i + 3]);
+							c.g = (float)atof(argv[i + 4]);
+							c.b = (float)atof(argv[i + 5]);
 						
 							FilterLinear linear(a, c);
 							*imgObj = linear << *imgObj;						
-							i += 3;
+							i += 6;
 
 						} else if (argv[i] == std::string("gamma")) {
 
@@ -62,16 +60,17 @@ int main(int argc, char *argv[]) {
 							} else {
 
 								line();
-								std::cerr << "Error: Gamma values must be lower than 2.0 and higher than 0.5" << std::endl;
+								std::cerr << "Error: Gamma values must be lower than 2.0 and higher than 0.5\n";
 								line();
 
 								system("PAUSE");
 								return 1;
 							}
+
 						} else {
 
 							line();
-							std::cerr << "Error: Wrong type of filter" << std::endl;
+							std::cerr << "Error: Wrong type of filter\n";
 							line();
 
 							system("PAUSE");
@@ -82,9 +81,7 @@ int main(int argc, char *argv[]) {
 
 				} else { i++; }
 			}
-		} else {
-			std::cerr << "Error: Image Failed Loading\n";
-		}	
+		} else { std::cerr << "Error: Image Failed Loading\n"; }	
 	
 		//adds the name of the new image
 		std::string newfilename = "filtered_" + filename;
