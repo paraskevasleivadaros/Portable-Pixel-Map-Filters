@@ -47,8 +47,11 @@ namespace imaging {
 
 		if (format != "ppm") return false;
 
+		int i_height = height;
+		int i_width = width;
+
 		// calls the ReadPPM which returns a pointer to float array and gives values to the 2 integers that we passed
-		float * f_buffer = ReadPPM(filename.c_str(), &(int&)width, &(int&)height); 
+		float * f_buffer = ReadPPM(filename.c_str(), &i_width, &i_height); 
 		// temporary pointer that shows in the begining of the table which contains the data we read
 		float * f_ptr = f_buffer; 
 

@@ -89,10 +89,7 @@ int main(int argc, char *argv[]) {
 		//adds the name of the new image
 		std::string newfilename = "filtered_" + filename;
 
-		if (!imgObj->save(newfilename, "ppm")) {
-
-			std::cerr << "Error: Image Failed Saving\n";
-		}
+		if (!imgObj->save(newfilename, "ppm")) std::cerr << "Error: Image Failed Saving\n";
 
 	imgObj->~Image();//Destroys the pointer of image object		
 	}
@@ -100,7 +97,6 @@ int main(int argc, char *argv[]) {
 	system("PAUSE");
 	return 0;
 } 
-
 
 void line() {
 	std::cout << "*******************************************\n";
