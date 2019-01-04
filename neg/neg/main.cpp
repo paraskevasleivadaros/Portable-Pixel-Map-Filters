@@ -105,7 +105,6 @@ int main(int argc, char *argv[]) {
 }
 }
 */
-
 #include "Filter.h"
 
 void spacing() { std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - -\n"; }
@@ -114,7 +113,7 @@ int main(int argc, char* argv[]) {
 
 	const char* file = nullptr;
 
-	imaging::Image* image = new imaging::Image(); // create an Image object
+	imaging::Image* imgObj = new imaging::Image(); // create an Image object
 
 	int i = 1; // pointer for the elements of the input	 
 
@@ -137,14 +136,14 @@ int main(int argc, char* argv[]) {
 		spacing();
 
 		// loads the image using the method load of the Image object
-		if (image->load(file, "ppm")) {
+		if (imgObj->load(file, "ppm")) {
 
 			// prints the dimensions of the Image
 			std::cout << "Loading Succeeded!\n";
 			spacing();
 			
 			// prints the dimensions of the Image
-			std::cout << "Image dimensions are: " << image->getWidth() << " X " << image->getHeight() << "\n";
+			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			spacing();
 
 			if (std::string(argv[i]) == "filter") {
@@ -187,12 +186,14 @@ int main(int argc, char* argv[]) {
 						}
 						else {
 
-							FilterGamma f(gamma); // create FilterGamma object
+							// Create FilterGamma object
+							FilterGamma gammaObj(gamma);
 
 							std::cout << "Applying gamma " << gamma << " filter...\n";
 							spacing();
 
-							*image = f << *image; //apply gamma filter 
+							// Apply gamma filter 
+							*imgObj = gammaObj << *imgObj; 
 						}
 					}
 
@@ -203,69 +204,47 @@ int main(int argc, char* argv[]) {
 						std::cout << "Initializing a & c...\n";
 						spacing();
 
-						i++;
+						a.r = std::stof(argv[i + 1], nullptr);
+						a.g = std::stof(argv[i + 2], nullptr);
+						a.b = std::stof(argv[i + 3], nullptr);
 
-						a.r = std::stof(argv[i], nullptr);
+						c.r = std::stof(argv[i + 4], nullptr);
+						c.g = std::stof(argv[i + 5], nullptr);
+						c.b = std::stof(argv[i + 6], nullptr);
 
-						//cout << "A r = " << a.r << endl;
+						i = i + 6;
 
-						i++;
-						a.g = std::stof(argv[i], nullptr);
-
-						//cout << "A g = " << a.g << endl;
-
-						i++;
-						a.b = std::stof(argv[i], nullptr);
-
-						//cout << "A b = " << a.b << endl;
-
-						i++;
-						c.r = std::stof(argv[i], nullptr);
-
-						//cout << "C r = " << c.r << endl;
-
-						i++;
-						c.g = std::stof(argv[i], nullptr);
-
-						//cout << "C g = " << c.g << endl;
-
-						i++;
-						c.b = std::stof(argv[i], nullptr);
-
-						//cout << "C b = " << c.b << endl;
-
-						FilterLinear f(a, c); // create a FilterLinear object with the 2 Colors objects as input
+						// Create FilterLinear object
+						FilterLinear linearObj(a, c); 
 
 						std::cout << "Applying linear ";
 						std::cout << argv[i - 5] << " " << argv[i - 4] << " " << argv[i - 3] << " ";
 						std::cout << argv[i - 2] << " " << argv[i - 1] << " " << argv[i - 0] << " ";
 						std::cout << "filter...\n";
 						spacing();
-					
-						*image = f << *image; // aplying filter linear
-					}
 
+						// Apply linear filter 
+						*imgObj = linearObj << *imgObj;
+					}
 				}
 				else {
 					i++; // if we dont find -f char we continue to find it
 				}
-
-		}
+			}
 		} else {
-			std::cerr << "Error: Loading Failed!\n"; // load of image has failed
+			std::cerr << "Error: Loading Failed!\n";
 			spacing();
 		}
 	}
 
-	// Now we have to save the file with the name filtered_imagename.ppm
-
-	std::string file_name = "filtered_" + (std::string)file; // we add the image name at the end of our file name
+	// we add the image name at the end of our file name
+	std::string newfile = "filtered_" + (std::string)file; 
 
 	std::cout << "Saving image...\n";
 	spacing();
 
 	// call save method to save file	
-	if (image->save(file_name, "ppm")) {
+	if (imgObj->save(newfile, "ppm")) {
 		std::cout << "Saving Succeeded!\n";
 		spacing();
 	} else {
@@ -273,7 +252,7 @@ int main(int argc, char* argv[]) {
 		spacing();
 	}
 
-	delete image; // freeing memory
+	delete imgObj; // freeing memory
 
 	system("PAUSE");
 
