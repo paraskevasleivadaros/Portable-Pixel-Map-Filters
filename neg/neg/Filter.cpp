@@ -1,7 +1,4 @@
 #include "Filter.h"
-#include <math.h>
-
-using namespace math;
 
 Filter::Filter() {}
 Filter::Filter(const Filter &f) {}

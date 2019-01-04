@@ -1,8 +1,6 @@
 //LEIVADAROS PARASKEVAS 3150090
 //KOYLOYRIS GEORGIOS 3150080
 /*
-#include <iostream>
-#include <string>
 #include "Filter.h"
 
 void line();
@@ -118,117 +116,136 @@ void line() {
 	std::cout << "*******************************************\n";
 }*/
 
-
-
-
-
-#include <iostream>
-#include <string>
 #include "Filter.h"
-#include "Image.h"
 
-using namespace imaging;
-using namespace std;
+void spacing() { std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - -\n"; }
 
 int main(int argc, char* argv[]) {
 
 	const char* file = nullptr;
 
-	Image* image = new Image(); // create an Image object
+	imaging::Image* image = new imaging::Image(); // create an Image object
 
-	unsigned int i = 1; // pointer for the elements of the input	 
+	int i = 1; // pointer for the elements of the input	 
 
-	if (argc < 1)
-	{
-		cerr << "Low number of input, try again" << endl;
+	if (argc < 6) {
 
-	}
-	else {
+		std::cerr << "Error: Bad Input\n";
 
-		file = argv[argc - 1]; // taking the name of the file
+	} else {
 
-		cout << "Loading image " << endl << "----------" << endl;
+		// taking the name of the file
+		file = argv[argc - 1]; 
 
-		if (image->load(file, "ppm")) { // loads the image using the method load of the Image object
+		spacing();
+		std::cout << "Loading image...\n";
+		spacing();
 
-			cout << "Load  Succeed" << endl << "----------" << endl << "Image dimensions are: " << image->getWidth() << " X " << image->getHeight() << endl << "----------" << endl; // prints the dimensions of the Image
+		// loads the image using the method load of the Image object
+		if (image->load(file, "ppm")) {
 
-			cout << "Starting reading the input" << endl << "----------" << endl;
+			// prints the dimensions of the Image
+			std::cout << "Loading Succeeded!\n";
+			spacing();
+			
+			// prints the dimensions of the Image
+			std::cout << "Image dimensions are: " << image->getWidth() << " X " << image->getHeight() << "\n";
+			spacing();
 
-			while (i < argc - 1) { // starting a while loop in ordeer to read the whole input
+			if (std::string(argv[i]) == "filter") {
+				std::cout << "Reading image...\n";
+				spacing();
+			} else {
+				system("PAUSE");
+				exit(1);
+			}
 
-				// strcmp() = compares 2 strings
-				if (strcmp(argv[i], "-f") == 0) { // if we find -f char we expect to execute a filter
+			i++; // go to the next command argument
 
-					i++; // go to the next element of the input
+			// starting a while loop in order to read the whole input
+			while (i < argc - 1) {
 
-					if (string("gamma").compare(argv[i]) == 0) { // user selected the gamma 
+				// if we find -f char we expect to execute a filter
+				if (std::string(argv[i]) == "-f") {
+
+					i++; // go to the next command argument
+
+					// user selected gamma 
+					if (std::string(argv[i]) == "gamma") {
 
 						i++;
 
-						float gamma = stof(argv[i], nullptr); // converting the string input to float 
+						// converting the string input to float 
+						float gamma = std::stof(argv[i], nullptr);
 
-						if (gamma < 0.5 || gamma > 2.0) { // check for gamma value. gamma should be between 0.5 and 2.0
+						// gamma should be between 0.5 and 2.0
+						if (gamma < 0.5 || gamma > 2.0) {
 
-							cout << "Gamma value is not acceptable" << endl << "Gamma should be between 0.5 and 2.0" << endl;
+							std::cout << "Error: Gamma Value Out Of Bounds\n";
+							std::cout << "[Gamma should be between 0.5 and 2.0]\n";
 
-							system("pause");
+							system("PAUSE");
 
 							exit(1);
+
 						}
 						else {
 
-							FilterGamma f(gamma); // create a FilterGamma object
+							FilterGamma f(gamma); // create FilterGamma object
 
-							std::cout << "Applying gamma " << gamma << endl << "----------" << endl;
+							std::cout << "Applying gamma " << gamma << " filter...\n";
+							spacing();
 
-							*image = f << *image; // we apply filter gamma
+							*image = f << *image; //apply gamma filter 
 						}
 					}
 
-					// stof() = converts a string to a float
-					// takes the string as paremeter and a size_t* variable. The second variable an be nullptr
-					if (string("linear").compare(argv[i]) == 0) {
+					if (std::string(argv[i]) == "linear") {
 
-						Color a, c; // we need 2 Colors objects in order to apply the linear filter					
+						Color a, c; // 2 Colors objects are needed to apply the linear filter					
 
-						cout << "Initializing a and c" << endl;
+						std::cout << "Initializing a & c...\n";
+						spacing();
 
 						i++;
 
-						a.r = stof(argv[i], nullptr);
+						a.r = std::stof(argv[i], nullptr);
 
 						//cout << "A r = " << a.r << endl;
 
 						i++;
-						a.g = stof(argv[i], nullptr);
+						a.g = std::stof(argv[i], nullptr);
 
 						//cout << "A g = " << a.g << endl;
 
 						i++;
-						a.b = stof(argv[i], nullptr);
+						a.b = std::stof(argv[i], nullptr);
 
 						//cout << "A b = " << a.b << endl;
 
 						i++;
-						c.r = stof(argv[i], nullptr);
+						c.r = std::stof(argv[i], nullptr);
 
 						//cout << "C r = " << c.r << endl;
 
 						i++;
-						c.g = stof(argv[i], nullptr);
+						c.g = std::stof(argv[i], nullptr);
 
 						//cout << "C g = " << c.g << endl;
 
 						i++;
-						c.b = stof(argv[i], nullptr);
+						c.b = std::stof(argv[i], nullptr);
 
 						//cout << "C b = " << c.b << endl;
 
 						FilterLinear f(a, c); // create a FilterLinear object with the 2 Colors objects as input
 
-						cout << "Applying linear " << endl << "----------" << endl;
-
+						std::cout << "Applying linear ";
+						std::cout << argv[i - 5] << " " << argv[i - 4] << " " << argv[i - 3] << " ";
+						std::cout << argv[i - 2] << " " << argv[i - 1] << " " << argv[i - 0] << " ";
+						std::cout << "filter...\n";
+						spacing();
+					
 						*image = f << *image; // aplying filter linear
 					}
 
@@ -236,30 +253,32 @@ int main(int argc, char* argv[]) {
 				else {
 					i++; // if we dont find -f char we continue to find it
 				}
-			}
+
 		}
-		else {
-			cout << "Load failed!" << endl; // load of image has failed
+		} else {
+			std::cerr << "Error: Loading Failed!\n"; // load of image has failed
 		}
 	}
 
 	// Now we have to save the file with the name filtered_imagename.ppm
 
-	string file_name = "filtered_"; // the string we want to to add	
+	std::string file_name = "filtered_" + (std::string)file; // we add the image name at the end of our file name
 
-	file_name.append(file); // we add the image name at the end of our file name
+	std::cout << "Saving image...\n";
+	spacing();
 
-	if (image->save(file_name, "ppm")) { // calls the save method to save the file	
-
-		cout << "Save succeed" << endl;
+	// call save method to save file	
+	if (image->save(file_name, "ppm")) {
+		std::cout << "Saving Succeeded!\n";
+		spacing();
+	} else {
+		std::cerr << "Error: Saving Failed!\n";
+		spacing();
 	}
-	else {
-		cout << "Save failed!" << endl;
-	}
 
-	delete image; // free the memory
+	delete image; // freeing memory
 
-	system("pause");
+	system("PAUSE");
 
 	return 0;
 }

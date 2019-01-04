@@ -4,16 +4,15 @@
 #define _FILTER
 
 #include "Image.h"
-#include "Vec3.h"
 
 typedef math::Vec3<float> Color;
 
 class Filter {
+
 	public:
 		Filter();
 		Filter(const Filter &f);
-		virtual ~Filter();
-	
+		virtual ~Filter();	
 		virtual imaging::Image operator << (const imaging::Image & image) = 0;
 };
 

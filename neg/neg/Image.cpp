@@ -1,7 +1,6 @@
 #include "../ppm/ppm.h"
 #include "Image.h"
 #include <ostream>
-#include <string>
 
 namespace imaging {
 
@@ -18,36 +17,34 @@ namespace imaging {
 	//Copy constructor
 	Image::Image(const Image &src) : Array(src) {}
 
-	//destructor
+	//Destructor
 	Image::~Image() {}
 
 	//Loads the image data from the specified file, if the extension of the filename matches the format string
 	bool Image::load(const std::string & filename, const std::string & format) {
 
-		int l_width, l_height;
+		int i_width, i_height;
 
 		std::string filenameNotConst = filename;
 		if (!isPPM(filenameNotConst)) return false;
 
 		if (format != "ppm") return false;
 
-		// calls the ReadPPM which returns a pointer to float array and gives values to the 2 integers that we passed
-		float * f_buffer = ReadPPM(filename.c_str(), &l_width, &l_height);
-		// temporary pointer that shows in the begining of the table which contains the data we read
-		float * f_ptr = f_buffer;
+		
+		float * f_buffer = ReadPPM(filename.c_str(), &i_width, &i_height); // calling ReadPPM()
+		
+		float * f_ptr = f_buffer; // temporary pointer that points to f_buffer
 
-		// check if we read the image correctly
-		// if ReadPPM returned null we failed to read the file and we return false
+		// check if reading the image succeded
 		if (f_buffer == nullptr) {
 			std::cerr << "Error: Load of Image Failed!\n";
 			return false;
-		}
-		else {
+		} else {
 
-			buffer.resize(l_width*l_height);
+			buffer.resize(i_width * i_height);
 			Color * color = new Color();
 
-			// initialize the pointers that show to green,  red, blue in the array we loaded before
+			// load into our color vector pointers (that show to green, red, blue of each pixel) the data from the loaded image 
 			for (unsigned int i = 0; i < buffer.size(); i++) {
 
 				(*color).r = *f_ptr;
@@ -62,49 +59,14 @@ namespace imaging {
 				buffer[i] = *color;
 			}
 
-			width = l_width;
-			height = l_height;			
+			width = i_width;
+			height = i_height;			
 
 			delete[] f_buffer, color; // free the memory
 			return true;
 		}
 	}
 
-	//Stores the image data to the specified file, if the extension of the filename matches the format string.
-	/*bool Image::save(const std::string & filename, const std::string & format) {
-
-		std::string filenameNotConst = filename;
-		if (!isPPM(filenameNotConst)) return false;
-
-		if (format != "ppm") return false;
-
-		Color * color_buffer = getRawDataPtr(); // a pointer to use it to pass all the data
-
-		float * f_buffer = new float[width * height * 3]; // create an new float table, this table we will write to the file
-		float * f_ptr = f_buffer; //  a pointer to use it to get access to all the table
-
-		// copy the data from buffer to the new table
-		// its color takes a different cell in the table
-		for (unsigned int i = 0; i < width*height; i++) {
-
-			*f_ptr = (*color_buffer).r;
-			f_ptr++;
-
-			*f_ptr = (*color_buffer).g;
-			f_ptr++;
-
-			*f_ptr = (*color_buffer).b;
-			f_ptr++;
-
-			color_buffer++;
-		}	
-
-		bool complete = WritePPM(f_buffer, width, height, filename.c_str());
-
-		delete[] f_buffer, color_buffer; // freeing memory
-
-		return complete;
-	}*/
 	bool Image::save(const std::string & filename, const std::string & format) {
 
 		std::string filenameNotConst = filename;
@@ -112,11 +74,12 @@ namespace imaging {
 
 		if (format != "ppm") { return false; }
 
-		float *f_buffer = new float[width * height * 3];
+		float *f_buffer = new float[width * height * 3]; // table we will write to the file
 
 		int w = width;
 		int h = height;
 
+		// copies the data from buffer to f_buffer
 		for (int i = 0; i < w * h; i++) {
 
 			f_buffer[i * 3] = buffer[i].r;
@@ -124,24 +87,23 @@ namespace imaging {
 			f_buffer[i * 3 + 2] = buffer[i].b;
 		}
 
-		return WritePPM(f_buffer, width, height, filename.c_str());
-	}
-	//Checks if format="ppm"
-	bool isPPM(std::string& filename) {
+		bool done = WritePPM(f_buffer, width, height, filename.c_str());
 
-		return (areEqual(filename.substr(filename.find_last_of(".") + 1), "ppm") ? true : false);
+		delete[] f_buffer; // freeing memory
+
+		return done;
 	}
+
+	//Checks if format="ppm"
+	bool isPPM(std::string& filename) {	return (areEqual(filename.substr(filename.find_last_of(".") + 1), "ppm"));}
 
 	//checks if 2 strings are equal
 	bool areEqual(const std::string& a, const std::string& b) {
 
 		if (b.size() != a.size()) return false;
 
-		for (unsigned int i = 0; i < a.size(); ++i) {
-			if (tolower(a[i]) != tolower(b[i])) {
-				return false;
-			}
-		}
+		for (unsigned int i = 0; i < a.size(); ++i) 
+			if (tolower(a[i]) != tolower(b[i]))	return false;
 
 		return true;
 	}
