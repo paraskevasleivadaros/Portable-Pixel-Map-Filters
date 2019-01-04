@@ -130,7 +130,12 @@ int main(int argc, char* argv[]) {
 
 	if (argc < 6) {
 
+		spacing();
 		std::cerr << "Error: Bad Input\n";
+		spacing();
+
+		system("PAUSE");
+		exit(1);
 
 	} else {
 
@@ -183,6 +188,7 @@ int main(int argc, char* argv[]) {
 
 							std::cout << "Error: Gamma Value Out Of Bounds\n";
 							std::cout << "[Gamma should be between 0.5 and 2.0]\n";
+							spacing();
 
 							system("PAUSE");
 
@@ -257,6 +263,7 @@ int main(int argc, char* argv[]) {
 		}
 		} else {
 			std::cerr << "Error: Loading Failed!\n"; // load of image has failed
+			spacing();
 		}
 	}
 
