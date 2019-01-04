@@ -1,10 +1,6 @@
 //LEIVADAROS PARASKEVAS 3150090
 //KOYLOYRIS GEORGIOS 3150080
 /*
-#include "Filter.h"
-
-void line();
-
 int main(int argc, char *argv[]) {
 
 	std::string filename;
@@ -107,9 +103,6 @@ int main(int argc, char *argv[]) {
 	system("PAUSE");
 	return 0;
 }
-
-void line() {
-	std::cout << "*******************************************\n";
 }
 */
 
