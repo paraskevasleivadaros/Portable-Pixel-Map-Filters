@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
 
 	imaging::Image* imgObj = new imaging::Image(); // create an Image object
 
-	int i = 1; // pointer for the elements of the input	 
+	int i = 1; // tracks the elements of the input	 
 
 	if (argc < 6) {
 
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 
 	} else {
 
-		// taking the name of the file
+		// name of file
 		file = argv[argc - 1]; 
 
 		spacing();
@@ -228,7 +228,7 @@ int main(int argc, char* argv[]) {
 					}
 				}
 				else {
-					i++; // if we dont find -f char we continue to find it
+					i++; // if we don't find -f char we continue to find it
 				}
 			}
 		} else {
@@ -237,7 +237,6 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	// we add the image name at the end of our file name
 	std::string newfile = "filtered_" + (std::string)file; 
 
 	std::cout << "Saving image...\n";
