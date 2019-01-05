@@ -9,9 +9,7 @@ int main(int argc, char* argv[]) {
 
 	const char* file = nullptr;
 
-	imaging::Image* imgObj = new imaging::Image(); // create an Image object
-
-	int i = 1; // tracks the elements of the input	 
+	imaging::Image* imgObj = new imaging::Image(); // create an Image object 
 
 	if (argc < 6) {
 
@@ -42,15 +40,15 @@ int main(int argc, char* argv[]) {
 			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			spacing();
 
-			if (std::string(argv[i]) == "filter") {
-				std::cout << "Reading image...\n";
-				spacing();
-			} else {
+			if (std::string(argv[1]) != "filter") {
 				system("PAUSE");
 				exit(1);
 			}
 
-			i++; // go to the next command argument
+			std::cout << "Reading image...\n";
+			spacing();
+
+			int i = 2; // tracks the elements of the input	
 
 			// starting a while loop in order to read the whole input
 			while (i < argc - 1) {
@@ -71,12 +69,11 @@ int main(int argc, char* argv[]) {
 						// gamma should be between 0.5 and 2.0
 						if (gamma < 0.5 || gamma > 2.0) {
 
-							std::cout << "Error: Gamma Value Out Of Bounds\n";
-							std::cout << "[Gamma should be between 0.5 and 2.0]\n";
+							std::cout << "Error: Gamma Is Out Of Bounds\n";
+							std::cout << "Gamma should be in the range [0.5 and 2.0]\n";
 							spacing();
 
 							system("PAUSE");
-
 							exit(1);
 
 						}
@@ -150,6 +147,5 @@ int main(int argc, char* argv[]) {
 	imgObj->~Image(); // freeing memory
 
 	system("PAUSE");
-
 	return 0;
 }
