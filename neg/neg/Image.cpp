@@ -23,7 +23,7 @@ namespace imaging {
 	//Loads the image data from the specified file, if the extension of the filename matches the format string
 	bool Image::load(const std::string & filename, const std::string & format) {
 
-		int i_width, i_height;
+		int widthTemp, heightTemp;
 
 		std::string filenameNotConst = filename;
 		if (!isPPM(filenameNotConst)) return false;
@@ -31,7 +31,7 @@ namespace imaging {
 		if (format != "ppm") return false;
 
 		
-		float * f_buffer = ReadPPM(filename.c_str(), &i_width, &i_height); // calling ReadPPM()
+		float * f_buffer = ReadPPM(filename.c_str(), &widthTemp, &heightTemp); // calling ReadPPM()
 		
 
 		// check if reading the image succeded
@@ -40,8 +40,8 @@ namespace imaging {
 			return false;
 		}
 
-		width = i_width;
-		height = i_height;
+		width = widthTemp;
+		height = heightTemp;
 
 		buffer.resize(width * height);
 		Color * color = new Color();

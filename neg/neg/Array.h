@@ -56,17 +56,13 @@ namespace math {
 					buffer[i] = data_ptr[i];		
 			}
 
-			Array() : width(0), height(0){
-				buffer.resize(0);
-			}
+			Array() : width(0), height(0), buffer(std::vector<T>(0)) {}
 
-			Array(unsigned int width, unsigned int height) : width(width), height(height) {
-				buffer.resize(width * height);
-			}
+			Array(unsigned int width, unsigned int height) : width(width), height(height), buffer(std::vector<T>(width*height)) {}
 
 			Array(unsigned int width, unsigned int height, std::vector<T> & data_ptr) : width(width), height(height), buffer(data_ptr) {}
 
-			Array(const Array<T> &src):width(src.getWidth()), height(src.getHeight()) {
+			Array(const Array<T> &src) : width(src.getWidth()), height(src.getHeight()) {
 				
 				buffer.resize(src.width * src.height);
 				for (unsigned int i = 0; i < buffer.size(); i++)

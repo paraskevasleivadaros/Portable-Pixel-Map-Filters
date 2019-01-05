@@ -3,7 +3,7 @@
 
 #include "Filter.h"
 
-void spacing() { std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - -\n"; }
+void spacing() { std::cout << "***********************************************\n"; }
 
 int main(int argc, char* argv[]) {
 
@@ -25,18 +25,11 @@ int main(int argc, char* argv[]) {
 		// name of file
 		file = argv[argc - 1]; 
 
-		spacing();
-		std::cout << "Loading image...\n";
-		spacing();
-
 		// loads the image using the method load of the Image object
 		if (imgObj->load(file, "ppm")) {
 
 			// prints the dimensions of the Image
-			std::cout << "Loading Succeeded!\n";
 			spacing();
-			
-			// prints the dimensions of the Image
 			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			spacing();
 
@@ -45,13 +38,10 @@ int main(int argc, char* argv[]) {
 				exit(1);
 			}
 
-			std::cout << "Reading image...\n";
-			spacing();
-
 			int i = 2; // tracks the elements of the input	
 
 			// starting a while loop in order to read the whole input
-			while (i < argc - 1) {
+			while (i < argc) {
 
 				// if we find -f char we expect to execute a filter
 				if (std::string(argv[i]) == "-f") {
@@ -88,22 +78,10 @@ int main(int argc, char* argv[]) {
 							// Apply gamma filter 
 							*imgObj = gammaObj << *imgObj; 
 						}
-					}
+					} else if (std::string(argv[i]) == "linear") {				
 
-					if (std::string(argv[i]) == "linear") {
-
-						Color a, c; // 2 Colors objects are needed to apply the linear filter					
-
-						std::cout << "Initializing a & c...\n";
-						spacing();
-
-						a.r = (float) std::atof(argv[i + 1]);
-						a.g = (float) std::atof(argv[i + 2]);
-						a.b = (float) std::atof(argv[i + 3]);
-
-						c.r = (float) std::atof(argv[i + 4]);
-						c.g = (float) std::atof(argv[i + 5]);
-						c.b = (float) std::atof(argv[i + 6]);
+						Color a = Color((float)std::atof(argv[i + 1]), (float)std::atof(argv[i + 2]), (float)std::atof(argv[i + 3]));
+						Color c = Color((float)std::atof(argv[i + 4]), (float)std::atof(argv[i + 5]), (float)std::atof(argv[i + 6]));
 
 						i = i + 6;
 
@@ -118,11 +96,23 @@ int main(int argc, char* argv[]) {
 
 						// Apply linear filter 
 						*imgObj = linearObj << *imgObj;
+
+					} else {
+
+						std::cerr << "Error: Invalid Filter\n";
+						spacing();
+						system("PAUSE");
+						exit(1);
 					}
+
+				} else if (i++ != argc) {
+						
+					std::cerr << "Error: Invalid Command\n";
+					spacing();
+					system("PAUSE");
+					exit(1);					
 				}
-				else {
-					i++; // if we don't find -f char we continue to find it
-				}
+				i++;
 			}
 		} else {
 			std::cerr << "Error: Loading Failed!\n";
@@ -132,14 +122,8 @@ int main(int argc, char* argv[]) {
 
 	std::string newfile = "filtered_" + (std::string)file; 
 
-	std::cout << "Saving image...\n";
-	spacing();
-
 	// call save method to save file	
-	if (imgObj->save(newfile, "ppm")) {
-		std::cout << "Saving Succeeded!\n";
-		spacing();
-	} else {
+	if (!imgObj->save(newfile, "ppm")) {
 		std::cerr << "Error: Saving Failed!\n";
 		spacing();
 	}
