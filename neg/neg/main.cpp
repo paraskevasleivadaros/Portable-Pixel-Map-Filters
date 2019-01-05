@@ -97,13 +97,13 @@ int main(int argc, char* argv[]) {
 						std::cout << "Initializing a & c...\n";
 						spacing();
 
-						a.r = std::stof(argv[i + 1], nullptr);
-						a.g = std::stof(argv[i + 2], nullptr);
-						a.b = std::stof(argv[i + 3], nullptr);
+						a.r = (float) std::atof(argv[i + 1]);
+						a.g = (float) std::atof(argv[i + 2]);
+						a.b = (float) std::atof(argv[i + 3]);
 
-						c.r = std::stof(argv[i + 4], nullptr);
-						c.g = std::stof(argv[i + 5], nullptr);
-						c.b = std::stof(argv[i + 6], nullptr);
+						c.r = (float) std::atof(argv[i + 4]);
+						c.g = (float) std::atof(argv[i + 5]);
+						c.b = (float) std::atof(argv[i + 6]);
 
 						i = i + 6;
 

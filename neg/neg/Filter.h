@@ -5,8 +5,6 @@
 
 #include "Image.h"
 
-typedef math::Vec3<float> Color;
-
 class Filter {
 
 	public:
