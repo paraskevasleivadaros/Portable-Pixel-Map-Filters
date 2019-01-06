@@ -35,6 +35,7 @@ imaging::Image FilterGamma::operator << (const imaging::Image& image) {
 
 	for (unsigned int i = 0; i < imgObj.getWidth(); i++) {
 		for (unsigned int j = 0; j < imgObj.getHeight(); j++)
+			// applying filter gamma
 			imgObj(i, j) = { pow(imgObj(i, j).r, gamma), pow(imgObj(i, j).g, gamma), pow(imgObj(i, j).b, gamma) };		
 	}
 	return imgObj;
