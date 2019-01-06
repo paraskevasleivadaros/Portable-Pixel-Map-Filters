@@ -4,7 +4,7 @@
 
 namespace imaging {
 
-	bool isPPM(std::string& filename);
+	bool isPPM(const std::string& filename);
 	bool areEqual(const std::string& a, const std::string& b);
 
 	//Default constructor
@@ -25,11 +25,7 @@ namespace imaging {
 
 		int widthTemp, heightTemp;
 
-		std::string filenameNotConst = filename;
-		if (!isPPM(filenameNotConst)) return false;
-
-		if (format != "ppm") return false;
-
+		if ((!isPPM(filename)) || format != "ppm") return false;
 		
 		float * f_buffer = ReadPPM(filename.c_str(), &widthTemp, &heightTemp); // calling ReadPPM()
 		
@@ -64,10 +60,7 @@ namespace imaging {
 
 	bool Image::save(const std::string & filename, const std::string & format) {
 
-		std::string filenameNotConst = filename;
-		if (!isPPM(filenameNotConst)) return false;
-
-		if (format != "ppm") { return false; }
+		if ((!isPPM(filename)) || format != "ppm") return false;
 
 		float *f_buffer = new float[width * height * 3]; // table we'll write to the file
 
@@ -87,7 +80,7 @@ namespace imaging {
 	}
 
 	//Checks if format="ppm"
-	bool isPPM(std::string& filename) {	return (areEqual(filename.substr(filename.find_last_of(".") + 1), "ppm"));}
+	bool isPPM(const std::string& filename) { return (areEqual(filename.substr(filename.find_last_of(".") + 1), "ppm")); }
 
 	//checks if 2 strings are equal
 	bool areEqual(const std::string& a, const std::string& b) {

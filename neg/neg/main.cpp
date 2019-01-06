@@ -4,6 +4,7 @@
 #include "Filter.h"
 
 void spacing() { std::cout << "***********************************************\n"; }
+#define TERMINATOR { std::cout << "Exiting Program...\n"; spacing(); system("PAUSE"); return 1; }
 
 int main(int argc, char* argv[]) {
 
@@ -16,9 +17,7 @@ int main(int argc, char* argv[]) {
 		spacing();
 		std::cerr << "Error: Bad Input\n";
 		spacing();
-
-		system("PAUSE");
-		exit(1);
+		TERMINATOR
 
 	} else {
 
@@ -33,10 +32,7 @@ int main(int argc, char* argv[]) {
 			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			spacing();
 
-			if (std::string(argv[1]) != "filter") {
-				system("PAUSE");
-				exit(1);
-			}
+			if (std::string(argv[1]) != "filter") { TERMINATOR }
 
 			int i = 2; // tracks the elements of the input	
 
@@ -62,10 +58,7 @@ int main(int argc, char* argv[]) {
 							std::cout << "Error: Gamma Is Out Of Bounds\n";
 							std::cout << "Gamma should be in the range [0.5 and 2.0]\n";
 							spacing();
-
-							system("PAUSE");
-							exit(1);
-
+							TERMINATOR
 						}
 						else {
 
@@ -101,22 +94,21 @@ int main(int argc, char* argv[]) {
 
 						std::cerr << "Error: Invalid Filter\n";
 						spacing();
-						system("PAUSE");
-						exit(1);
+						TERMINATOR
 					}
 
-				} else if (i++ != argc) {
+				} else if (++i != argc) {
 						
 					std::cerr << "Error: Invalid Command\n";
 					spacing();
-					system("PAUSE");
-					exit(1);					
+					TERMINATOR
 				}
 				i++;
 			}
 		} else {
 			std::cerr << "Error: Loading Failed!\n";
 			spacing();
+			TERMINATOR
 		}
 	}
 
@@ -126,6 +118,7 @@ int main(int argc, char* argv[]) {
 	if (!imgObj->save(newfile, "ppm")) {
 		std::cerr << "Error: Saving Failed!\n";
 		spacing();
+		TERMINATOR
 	}
 
 	imgObj->~Image(); // freeing memory
