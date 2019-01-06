@@ -7,21 +7,21 @@ namespace imaging {
 
 	float * ReadPPM(const char * filename, int * w, int * h) {
 		
-		std::ifstream iFile(filename, std::ios::in | std::ios::binary); //opening file for reading
+		std::ifstream iFile(filename, std::ios::in | std::ios::binary); // opening file for reading
 
-		//checking if the file's opened correctly
+		// checking if the file's opened correctly
 		if (!iFile.is_open()) {
 			std::cerr << "Error: Opening File Failed" << std::endl;
 			return nullptr;
 		}
 
-		//reading the values of the file's header
+		// reading the values of the file's header
 		std::string formatOfImage;
 		unsigned int width, height, max;
 
 		iFile >> formatOfImage >> width >> height >> max;
 
-		//checking if format, width and height are correct
+		// checking if format, width and height are correct
 		if (formatOfImage != "P6") {
 			std::cerr << "Error: Format Is Not P6" << std::endl;
 			iFile.close();
@@ -34,7 +34,7 @@ namespace imaging {
 			return nullptr;
 		}
 
-		//since width and height exist we pass them into w and h pointers
+		// since width and height exist we pass them into w and h pointers
 		*w = width;
 		*h = height;
 
@@ -44,13 +44,13 @@ namespace imaging {
 			return nullptr;
 		}
 
-		//reading the rest of the file
-		unsigned int sizeOfBuffer = height * width * 3; //finding out how much space our buffer will take up
-		unsigned char * buffer = new unsigned char[sizeOfBuffer]; //array that we'll use later to convert our data to floats
-		iFile.get();//skips blanks after header
-		iFile.read((char *)buffer, sizeOfBuffer); //initializing array buffer with data from our file
+		// reading the rest of the file
+		unsigned int sizeOfBuffer = height * width * 3; // finding out how much space our buffer will take up
+		unsigned char * buffer = new unsigned char[sizeOfBuffer]; // array that we'll use later to convert our data to floats
+		iFile.get();// skips blanks after header
+		iFile.read((char *)buffer, sizeOfBuffer); // initializing array buffer with data from our file
 
-		float *f_buffer = new float[sizeOfBuffer]; //array containing float values
+		float *f_buffer = new float[sizeOfBuffer]; // array containing float values
 
 		/* converting integers values of array "buffer" ranging between 0 and  255
 		   to normalized range of float numbers ranging between 0 and 1
@@ -59,20 +59,20 @@ namespace imaging {
 			f_buffer[i] = buffer[i] / (float)max;
 		}
 
-		iFile.close(); //closing ifstream "iFile"
+		iFile.close(); // closing ifstream "iFile"
 
-		delete[] buffer; //deleting array "buffer" since it takes up useless space
+		delete[] buffer; // freeing memory
 
-		return f_buffer; //returning pointer to first element of f_Buffer array
+		return f_buffer; // returning pointer to first element of f_Buffer array
 	}
 
 	bool WritePPM(const float * data, int w, int h, const char * filename) {
 
-		std::ofstream oFile(filename, std::ios::out | std::ios::binary); //opening file for writing
+		std::ofstream oFile(filename, std::ios::out | std::ios::binary); // opening file for writing
 		
 		//checking if the file's opened correctly
 		if (!oFile.is_open()) {
-		std::cerr << "Error: Opening File Failed" << std::endl;
+			std::cerr << "Error: Opening File Failed" << std::endl;
 			return false;
 		}
 
@@ -80,24 +80,24 @@ namespace imaging {
 		std::string formatOfImage = "P6";
 		oFile << formatOfImage << "\n" << w << "\n" << h << "\n" << 255 << "\n";
 
-		//writing the body of the file
-		unsigned int sizeOfBuffer = h * w * 3; //finding out how much space our buffer will take up
+		// writing the body of the file
+		unsigned int sizeOfBuffer = h * w * 3; // finding out how much space our buffer will take up
 
-		unsigned char * buffer = new unsigned char[sizeOfBuffer]; //array that we'll use to write data
+		unsigned char * buffer = new unsigned char[sizeOfBuffer]; // array that we'll use to write data
 
 		/* converting normalized range of float numbers ranging between 0 and 1 to
 			integers values of array "buffer" ranging between 0 and  255 
 		*/
-		for (unsigned int i = 0; i < sizeOfBuffer; i++) {
+		for (unsigned int i = 0; i < sizeOfBuffer; i++)
 			buffer[i] = (char) (data[i] * 255.0f);
-		}
+		
 
-		oFile.write((char *)buffer, sizeOfBuffer);//writes the buffer inside the image,after the header
+		oFile.write((char *)buffer, sizeOfBuffer); //writes the buffer inside the image, after the header
 		
 		oFile.flush();
-		oFile.close();//closing ofstream "oFile"
+		oFile.close(); //closing ofstream "oFile"
 
-		delete[] buffer;//deleting array "buffer" since it takes up useless space
+		delete[] buffer; //freeing memory
 
 		return true;
 	}
