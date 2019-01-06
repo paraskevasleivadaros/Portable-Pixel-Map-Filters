@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 		// loads the image using the method load of the Image object
 		if (imgObj->load(file, "ppm")) {
 
-			// prints the dimensions of the Image
+			// prints the dimensions of the image
 			spacing();
 			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			spacing();
@@ -37,22 +37,21 @@ int main(int argc, char* argv[]) {
 			int i = 2; // tracks the elements of the input	
 
 			// starting a while loop in order to read the whole input
-			while (i < argc) {
+			while (i < argc-1) {
 
 				// if we find -f char we expect to execute a filter
 				if (std::string(argv[i]) == "-f") {
 
 					i++; // go to the next command argument
 
-					// user selected gamma 
-					if (std::string(argv[i]) == "gamma") {
+					if (std::string(argv[i]) == "gamma") { // user selected "gamma" 
 
-						i++;
+						i++; // go to the next command argument
 
 						// converting the string input to float 
 						float gamma = std::stof(argv[i], nullptr);
 
-						// gamma should be between 0.5 and 2.0
+						// gamma should in the range [0.5, 2.0]
 						if (gamma < 0.5 || gamma > 2.0) {
 
 							std::cout << "Error: Gamma Is Out Of Bounds\n";
@@ -71,21 +70,22 @@ int main(int argc, char* argv[]) {
 							// Apply gamma filter 
 							*imgObj = gammaObj << *imgObj; 
 						}
-					} else if (std::string(argv[i]) == "linear") {				
+					} else if (std::string(argv[i]) == "linear") {	// user selected "linear" 			
 
+						// initialize Color objects "a" and "c"
 						Color a = Color((float)std::atof(argv[i + 1]), (float)std::atof(argv[i + 2]), (float)std::atof(argv[i + 3]));
 						Color c = Color((float)std::atof(argv[i + 4]), (float)std::atof(argv[i + 5]), (float)std::atof(argv[i + 6]));
-
-						i = i + 6;
 
 						// Create FilterLinear object
 						FilterLinear linearObj(a, c); 
 
 						std::cout << "Applying linear ";
-						std::cout << argv[i - 5] << " " << argv[i - 4] << " " << argv[i - 3] << " ";
-						std::cout << argv[i - 2] << " " << argv[i - 1] << " " << argv[i - 0] << " ";
+						std::cout << argv[i + 1] << " " << argv[i + 2] << " " << argv[i + 3] << " ";
+						std::cout << argv[i + 4] << " " << argv[i + 5] << " " << argv[i + 6] << " ";
 						std::cout << "filter...\n";
 						spacing();
+
+						i = i + 6;
 
 						// Apply linear filter 
 						*imgObj = linearObj << *imgObj;
