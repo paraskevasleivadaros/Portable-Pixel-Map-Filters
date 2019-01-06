@@ -4,7 +4,10 @@
 
 namespace imaging {
 
+	// checks if extension of file matches "ppm"
 	bool isPPM(const std::string& filename);
+
+	// checks if two strings are equal
 	bool areEqual(const std::string& a, const std::string& b);
 
 	//Default constructor
@@ -20,17 +23,18 @@ namespace imaging {
 	//Destructor
 	Image::~Image() {}
 
-	//Loads the image data from the specified file, if the extension of the filename matches the format string
+	// Loads the image data from the specified file, if the extension of the filename matches the format string
 	bool Image::load(const std::string & filename, const std::string & format) {
 
 		int widthTemp, heightTemp;
 
+		// check if extension and format is "ppm"
 		if ((!isPPM(filename)) || format != "ppm") return false;
 		
-		float * f_buffer = ReadPPM(filename.c_str(), &widthTemp, &heightTemp); // calling ReadPPM()
-		
+		// call ReadPPM()
+		float * f_buffer = ReadPPM(filename.c_str(), &widthTemp, &heightTemp);
 
-		// check if reading the image succeded
+		// check if image reading succeded
 		if (f_buffer == nullptr) {
 			std::cerr << "Error: Load of Image Failed!\n";
 			return false;
@@ -42,7 +46,7 @@ namespace imaging {
 		buffer.resize(width * height);
 		Color * color = new Color();
 
-		// load into our color vector pointers (that show to green, red, blue of each pixel) the data from the loaded image 
+		// load into our color vector pointers (that show to green, red, blue of each pixel) the data from our loaded image 
 		for (unsigned int i = 0; i < buffer.size(); i++) {
 
 			(*color).r = f_buffer[i * 3];
@@ -58,11 +62,14 @@ namespace imaging {
 		return true;	
 	}
 
+	// saves the image data from the specified file, if the extension of the filename matches the format string
 	bool Image::save(const std::string & filename, const std::string & format) {
 
+		// check if extension and format is "ppm"
 		if ((!isPPM(filename)) || format != "ppm") return false;
 
-		float *f_buffer = new float[width * height * 3]; // table we'll write to the file
+		// table we'll write to the file
+		float *f_buffer = new float[width * height * 3];
 
 		// copies the data from buffer to f_buffer
 		for (unsigned int i = 0; i < width * height; i++) {
@@ -75,14 +82,13 @@ namespace imaging {
 		bool done = WritePPM(f_buffer, width, height, filename.c_str());
 
 		delete[] f_buffer; // freeing memory
-
 		return done;
 	}
 
-	//Checks if format="ppm"
+	// checks if format = "ppm"
 	bool isPPM(const std::string& filename) { return (areEqual(filename.substr(filename.find_last_of(".") + 1), "ppm")); }
 
-	//checks if 2 strings are equal
+	// checks if 2 strings are equal
 	bool areEqual(const std::string& a, const std::string& b) {
 
 		if (b.size() != a.size()) return false;

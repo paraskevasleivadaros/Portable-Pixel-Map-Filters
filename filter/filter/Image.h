@@ -16,7 +16,7 @@
 /*! The imaging namespace contains every class or function associated with the image storage, compression and manipulation.
  */
 
-//create pseudonym of math::Vec3<float>
+// create pseudonym of math::Vec3<float>
 typedef math::Vec3<float> Color;
 
 namespace imaging {
@@ -37,6 +37,7 @@ namespace imaging {
 		 * All values stored in the Color data type components are assumed to be floating point values and for typical (normalized)
 		 * intensity ranges, each color component is within the range [0.0, 1.0].
 		 */
+
 	class Image : public math::Array<Color>	{
 
 		public:
@@ -75,8 +76,6 @@ namespace imaging {
 			/*! The Image destructor.
 			 */
 			~Image();
-
-			/*Image & operator = (const Image & right);*/
 
 			/*
 			 * Loads the image data from the specified file, if the extension of the filename matches the format string.

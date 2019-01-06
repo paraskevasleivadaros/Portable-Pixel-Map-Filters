@@ -16,6 +16,7 @@ imaging::Image FilterLinear::operator << (const imaging::Image& image) {
 			
 			Color rgb = imgObj.getPosition(i, j)*a + c;
 
+			// every color channel must be in the range [0,1] 
 			rgb = rgb.clampToLowerBound(0.0f);
 			rgb = rgb.clampToUpperBound(1.0f);
 
@@ -33,12 +34,8 @@ imaging::Image FilterGamma::operator << (const imaging::Image& image) {
 	imaging::Image imgObj = image;
 
 	for (unsigned int i = 0; i < imgObj.getWidth(); i++) {
-		for (unsigned int j = 0; j < imgObj.getHeight(); j++) {
-
-			imgObj(i, j).r = pow(imgObj(i, j).r, gamma);
-			imgObj(i, j).g = pow(imgObj(i, j).g, gamma);
-			imgObj(i, j).b = pow(imgObj(i, j).b, gamma);
-		}
+		for (unsigned int j = 0; j < imgObj.getHeight(); j++)
+			imgObj(i, j) = { pow(imgObj(i, j).r, gamma), pow(imgObj(i, j).g, gamma), pow(imgObj(i, j).b, gamma) };		
 	}
 	return imgObj;
 }
