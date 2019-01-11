@@ -57,18 +57,18 @@ int main(int argc, char* argv[]) {
 
 						i++; // go to the next command argument
 
+						// Initialize gamma
 						#ifdef _DEBUG
 							std::cout << "Initilazing gamma...\n";
 						#endif	
-
 						// converting the string input to float 
 						float gamma = std::stof(argv[i], nullptr);
 
 						// gamma should in the range [0.5, 2.0]
 						if (gamma < 0.5 || gamma > 2.0) {
 
-							std::cout << "Error: Gamma Is Out Of Bounds\n";
-							std::cout << "Gamma should be in the range [0.5 and 2.0]\n";
+							std::cerr << "Error: Gamma Is Out Of Bounds\n";
+							std::cerr << "Gamma should be in the range [0.5 and 2.0]\n";
 							spacing();
 							TERMINATOR
 						}
@@ -86,10 +86,9 @@ int main(int argc, char* argv[]) {
 					} else if (std::string(argv[i]) == "linear") {	// user selected "linear" 			
 
 						#ifdef _DEBUG
-							std::cout << "Initilazing linear...\n";
+							std::cout << "Initilazing Color a, c...\n";
 						#endif	
-
-						// initialize Color objects "a" and "c"
+						// Initialize Color objects "a" and "c"
 						Color a = Color((float)std::atof(argv[i + 1]), (float)std::atof(argv[i + 2]), (float)std::atof(argv[i + 3]));
 						Color c = Color((float)std::atof(argv[i + 4]), (float)std::atof(argv[i + 5]), (float)std::atof(argv[i + 6]));
 
@@ -102,7 +101,7 @@ int main(int argc, char* argv[]) {
 						std::cout << "filter...\n";
 						spacing();
 
-						i = i + 6;
+						i+=6;
 
 						// Apply linear filter 
 						*imgObj = linearObj << *imgObj;
