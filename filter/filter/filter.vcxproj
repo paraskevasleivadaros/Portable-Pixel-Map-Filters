@@ -167,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
+    <ClInclude Include="Debugging.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Vec3.h" />

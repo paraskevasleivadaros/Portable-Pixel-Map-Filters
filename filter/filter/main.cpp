@@ -2,6 +2,7 @@
 //KOYLOYRIS GEORGIOS 3150080
 
 #include "Filter.h"
+#include "Debugging.h"
 
 void spacing() { std::cout << "***********************************************\n"; }
 #define TERMINATOR { std::cout << "Exiting Program...\n"; spacing(); system("PAUSE"); return 1; }
@@ -21,6 +22,10 @@ int main(int argc, char* argv[]) {
 
 	} else {
 
+		#ifdef PrintArgv
+			PrintArgv(argc)
+		#endif	
+
 		// name of file
 		file = argv[argc - 1]; 
 
@@ -32,7 +37,11 @@ int main(int argc, char* argv[]) {
 			std::cout << "Image dimensions are: " << imgObj->getWidth() << " X " << imgObj->getHeight() << "\n";
 			spacing();
 
-			if (std::string(argv[1]) != "filter") { TERMINATOR }
+			#ifdef _DEBUG
+				if (std::string(argv[1]) != "filterd") { TERMINATOR }
+			#else
+				if (std::string(argv[1]) != "filter") { TERMINATOR }
+			#endif
 
 			int i = 2; // tracks the elements of the input	
 
@@ -47,6 +56,10 @@ int main(int argc, char* argv[]) {
 					if (std::string(argv[i]) == "gamma") { // user selected "gamma" 
 
 						i++; // go to the next command argument
+
+						#ifdef _DEBUG
+							std::cout << "Initilazing gamma...\n";
+						#endif	
 
 						// converting the string input to float 
 						float gamma = std::stof(argv[i], nullptr);
@@ -71,6 +84,10 @@ int main(int argc, char* argv[]) {
 							*imgObj = gammaObj << *imgObj; 
 						}
 					} else if (std::string(argv[i]) == "linear") {	// user selected "linear" 			
+
+						#ifdef _DEBUG
+							std::cout << "Initilazing linear...\n";
+						#endif	
 
 						// initialize Color objects "a" and "c"
 						Color a = Color((float)std::atof(argv[i + 1]), (float)std::atof(argv[i + 2]), (float)std::atof(argv[i + 3]));

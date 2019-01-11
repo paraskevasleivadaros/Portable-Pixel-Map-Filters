@@ -11,17 +11,37 @@ namespace imaging {
 	bool areEqual(const std::string& a, const std::string& b);
 
 	//Default constructor
-	Image::Image() {}
+	Image::Image() {
+		#ifdef _DEBUG
+				std::cout << "	i-> Image1 constructor\n";
+		#endif	
+	}
 
-	Image::Image(unsigned int width, unsigned int height) : Array<Color>(width, height) {}
+	Image::Image(unsigned int width, unsigned int height) : Array<Color>(width, height) {
+		#ifdef _DEBUG
+				std::cout << "	i-> Image2 constructor\n";
+		#endif	
+	}
 
-	Image::Image(unsigned int width, unsigned int height, std::vector<Color> & data_ptr) : Array<Color>(width, height, data_ptr) {}
+	Image::Image(unsigned int width, unsigned int height, std::vector<Color> & data_ptr) : Array<Color>(width, height, data_ptr) {
+		#ifdef _DEBUG
+				std::cout << "	i-> Image3 constructor\n";
+		#endif	
+	}
 
 	//Copy constructor
-	Image::Image(const Image &src) : Array(src) {}
+	Image::Image(const Image &src) : Array(src) {
+		#ifdef _DEBUG
+				std::cout << "	i-> Image copy constructor\n";
+		#endif	
+	}
 
 	//Destructor
-	Image::~Image() {}
+	Image::~Image() {
+		#ifdef _DEBUG
+				std::cout << "	i-> Image destructor\n";
+		#endif	
+	}
 
 	// Loads the image data from the specified file, if the extension of the filename matches the format string
 	bool Image::load(const std::string & filename, const std::string & format) {

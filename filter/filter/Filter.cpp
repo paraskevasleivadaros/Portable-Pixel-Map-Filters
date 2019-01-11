@@ -1,14 +1,41 @@
 #include "Filter.h"
 
-Filter::Filter() {}
-Filter::Filter(const Filter &f) {}
-Filter::~Filter() {}
+Filter::Filter() {
+	#ifdef _DEBUG
+		std::cout << "	f-> Filter constructor\n";
+	#endif	
+}
+Filter::Filter(const Filter &f) {
+	#ifdef _DEBUG
+		std::cout << "	f-> Filter copy constructor\n";
+	#endif	
+}
+Filter::~Filter() {
+	#ifdef _DEBUG
+		std::cout << "	f-> Filter destructor\n";
+	#endif	
+}
 
-FilterLinear::FilterLinear() : a(0.0), c(0.0) {}
-FilterLinear::FilterLinear(Color a, Color c) : a(a), c(c) {}
-FilterLinear::~FilterLinear() {}
-imaging::Image FilterLinear::operator << (const imaging::Image& image) {
-		
+FilterLinear::FilterLinear() : a(0.0), c(0.0) {
+	#ifdef _DEBUG
+		std::cout << "	l-> Filter Linear constructor\n";
+	#endif	
+}
+FilterLinear::FilterLinear(Color a, Color c) : a(a), c(c) {
+	#ifdef _DEBUG
+		std::cout << "	l-> Filter Linear constructor\n";
+	#endif	
+}
+FilterLinear::~FilterLinear() {
+	#ifdef _DEBUG
+		std::cout << "	l-> Filter Linear destructor\n";
+	#endif	
+}
+imaging::Image FilterLinear::operator << (const imaging::Image& image) {	
+	#ifdef _DEBUG
+		std::cout << "	l-> FilterLinear::operator <<\n";
+	#endif	
+
 	imaging::Image imgObj = image;
 
 	for (unsigned int i = 0; i < imgObj.getWidth(); i++) {
@@ -26,11 +53,26 @@ imaging::Image FilterLinear::operator << (const imaging::Image& image) {
 	return imgObj;
 }
 
-FilterGamma::FilterGamma() : gamma(0.0) {}
-FilterGamma::FilterGamma(float gamma) : gamma(gamma) {}
-FilterGamma::~FilterGamma() {}
-imaging::Image FilterGamma::operator << (const imaging::Image& image) {
-		
+FilterGamma::FilterGamma() : gamma(0.0) {
+	#ifdef _DEBUG
+		std::cout << "	g-> Filter Gamma constructor\n";
+	#endif	
+}
+FilterGamma::FilterGamma(float gamma) : gamma(gamma) {
+	#ifdef _DEBUG
+		std::cout << "	g-> Filter Gamma constructor\n";
+	#endif	
+}
+FilterGamma::~FilterGamma() {
+	#ifdef _DEBUG
+		std::cout << "	g-> Filter Gamma destructor\n";
+	#endif	
+}
+imaging::Image FilterGamma::operator << (const imaging::Image& image) {	
+	#ifdef _DEBUG
+		std::cout << "	g-> FilterGamma::operator <<\n";
+	#endif	
+
 	imaging::Image imgObj = image;
 
 	for (unsigned int i = 0; i < imgObj.getWidth(); i++) {

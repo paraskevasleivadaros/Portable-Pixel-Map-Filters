@@ -3,6 +3,8 @@
 #ifndef _ARRAY
 #define _ARRAY
 
+//#define ARRAYDEBUG
+
 #include <vector>
 #include <iostream>
 
@@ -104,14 +106,22 @@ namespace math {
 			 *
 			 * By default, the dimensions of the array should be zero and the buffer size must be set to zero.
 			 */
-			Array() : width(0), height(0), buffer(std::vector<T>(0)) {}
+			Array() : width(0), height(0), buffer(std::vector<T>(0)) {
+				#ifdef ARRAYDEBUG
+						std::cout << "	a-> Array1 constructor\n";
+				#endif	
+			}
 
 			/*! Constructor with width and height specification.
 			 *
 			 * \param width is the desired width of the new Array.
 			 * \param height is the desired height of the new Array.
 			 */
-			Array(unsigned int width, unsigned int height) : width(width), height(height), buffer(std::vector<T>(width*height)) {}
+			Array(unsigned int width, unsigned int height) : width(width), height(height), buffer(std::vector<T>(width*height)) {
+				#ifdef ARRAYDEBUG
+							std::cout << "	a-> Array2 constructor\n";
+				#endif	
+			}
 
 			/*! Constructor with data initialization.
 			 *
@@ -119,7 +129,11 @@ namespace math {
 			 * \param height is the desired height of the new image.
 			 * \param data_ptr is the source of the data to copy to the internal array buffer.
 			 */
-			Array(unsigned int width, unsigned int height, std::vector<T> & data_ptr) : width(width), height(height), buffer(data_ptr) {}
+			Array(unsigned int width, unsigned int height, std::vector<T> & data_ptr) : width(width), height(height), buffer(data_ptr) {
+				#ifdef ARRAYDEBUG
+					std::cout << "	a-> Array3 constructor\n";
+				#endif	
+			}
 
 
 			/*! Copy constructor.
@@ -128,6 +142,10 @@ namespace math {
 			 */
 			Array(const Array<T> &src) : width(src.getWidth()), height(src.getHeight()) {
 				
+				#ifdef ARRAYDEBUG
+					std::cout << "	a-> Array copy constructor\n";
+				#endif	
+
 				buffer.resize(src.width * src.height);
 				for (unsigned int i = 0; i < buffer.size(); i++)
 					buffer[i] = src.buffer[i];
@@ -135,13 +153,22 @@ namespace math {
 
 			/*! The Array destructor.
 			 */
-			virtual ~Array() { buffer.clear(); }
+			virtual ~Array() { 
+				#ifdef ARRAYDEBUG
+					std::cout << "	a-> Array destructor\n";
+				#endif	
+				buffer.clear(); 
+			}
 
 			/*! Copy assignment operator.
 			 *
 			 * \param right is the source array.
 			 */
 			Array<T> & operator = (const Array<T> & right) {
+
+				#ifdef ARRAYDEBUG
+					std::cout << "	a-> Array<T> & operator\n";
+				#endif	
 
 				if (&right == this)	return *this;
 
