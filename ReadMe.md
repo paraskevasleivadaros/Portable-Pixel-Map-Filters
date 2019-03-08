@@ -9,11 +9,15 @@ Project for the course "Προγραμματισμός Υπολογιστών μ
 
 ## Using Command Prompt:
 
+// TO DO
+
 Press Enter, that&#39;s it!
 
 You can check the result with the preview software included inside this repo or with any other program that recognizes the PPM format.
 
 ## Using Visual Studio
+
+// TO DO
 
 Click on File>Open>Project/Solution and navigate to C:\Users\USER\Downloads\Portable-Pixel-Map-Filters-master\neg
 
